@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Contracts;
+﻿using DataAccessLayer.Contexts.EFCore;
+using DataAccessLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Contexts.EFCore
+namespace DataAccessLayer.Concrete
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
@@ -28,7 +29,7 @@ namespace DataAccessLayer.Contexts.EFCore
             _context.Set<T>().Remove(entity);
         }
 
-        public IQueryable<T> FindAll(bool trackChanges)
+        public IQueryable<T> GetAll(bool trackChanges)
         {
             if (trackChanges)
                 return _context.Set<T>();
@@ -36,7 +37,7 @@ namespace DataAccessLayer.Contexts.EFCore
             return _context.Set<T>().AsNoTracking();
         }
 
-        public IQueryable<T> FindBy(Expression<Func<T, bool>> expression, bool trackChanges)
+        public IQueryable<T> GetBy(Expression<Func<T, bool>> expression, bool trackChanges)
         {
             if (trackChanges)
                 return _context.Set<T>().Where(expression);

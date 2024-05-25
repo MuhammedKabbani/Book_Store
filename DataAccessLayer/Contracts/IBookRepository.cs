@@ -9,6 +9,6 @@ namespace DataAccessLayer.Contracts
 {
     public interface IBookRepository : IRepositoryBase<Book>
     {
-        IQueryable<Book> GetBookById(int id,bool trackChanges);
+        Book? GetBookById(int id, bool trackChanges);
     }
 }

@@ -3,6 +3,8 @@ using EntityLayer.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServicesLayer.Concrete;
+using ServicesLayer.Contracts;
 
 namespace BookAPI.Controllers
 {
@@ -10,17 +12,19 @@ namespace BookAPI.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IRepositoryManager _repoManager;
-        private readonly IBookRepository _bookRepo;
-        public BookController(IRepositoryManager repoManager)
+        private readonly IServiceManager _serviceManager;
+        private readonly IBookService _bookServices;
+
+        public BookController(IServiceManager serviceManager)
         {
-            _repoManager = repoManager;
-            _bookRepo = _repoManager.Book;
+            _serviceManager = serviceManager;
+            _bookServices = _serviceManager.BookService;
         }
+
         [HttpGet]
         public IActionResult GetBooks()
         {
-            return Ok(_bookRepo.FindAll(false));
+            return Ok(_bookServices.GetAllBooks(false));
         }
         [HttpGet("{id:int}")]
         public IActionResult GetBookById([FromRoute(Name = "id")]int id)
@@ -30,7 +34,7 @@ namespace BookAPI.Controllers
 
             try
             {
-                Book? book = _bookRepo.GetBookById(id, false).SingleOrDefault();
+                Book? book = _bookServices.GetBookById(id, false);
                 if (book is null)
                     return NotFound();
 
@@ -49,8 +53,7 @@ namespace BookAPI.Controllers
 
             try
             {
-                _bookRepo.Create(book);
-                _repoManager.Save();
+                _bookServices.CreateBook(book);
 
                 return StatusCode(201, book);
             }
@@ -66,8 +69,7 @@ namespace BookAPI.Controllers
             try
             {
                 // check book?
-                var entity = _bookRepo.FindBy(b => b.Id.Equals(id),true)
-                    .SingleOrDefault();
+                var entity = _bookServices.GetBookById(id, true);
 
                 if (entity is null)
                     return NotFound(); // 404
@@ -79,7 +81,7 @@ namespace BookAPI.Controllers
                 entity.Title = book.Title;
                 entity.Price = book.Price;
 
-                _repoManager.Save();
+                _bookServices.UpdateBook(id,entity,true);
 
                 return Ok(book);
             }
@@ -93,8 +95,7 @@ namespace BookAPI.Controllers
         {
             try
             {
-                var entity = _bookRepo.FindBy(b => b.Id.Equals(id),false)
-                 .SingleOrDefault();
+                var entity = _bookServices.GetBookById(id, false);
 
 
                 if (entity is null)
@@ -104,8 +105,7 @@ namespace BookAPI.Controllers
                         message = $"Book with id:{id} could not found."
                     });  // 404
 
-                _bookRepo.Delete(entity);
-                _repoManager.Save();
+                _bookServices.DeleteBook(id);
 
                 return NoContent();
             }
@@ -121,15 +121,15 @@ namespace BookAPI.Controllers
             try
             {
                 // check entity
-                var entity = _bookRepo.FindBy(b => b.Id.Equals(id),true)
-                    .SingleOrDefault();
+                var entity = _bookServices.GetBookById(id, true);
+
 
                 if (entity is null)
                     return NotFound(); // 404
 
                 bookPatch.ApplyTo(entity);
 
-                _repoManager.Save();
+                _bookServices.UpdateBook(id,entity,true);
 
                 return NoContent(); // 204
             }

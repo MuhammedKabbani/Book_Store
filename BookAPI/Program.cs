@@ -18,6 +18,7 @@ namespace BookAPI
 
             builder.Services.ConfigureSqlContext(builder.Configuration);
             builder.Services.RegisterRepositoryManager();
+            builder.Services.RegisterServiceManager();
 
 
             var app = builder.Build();

@@ -1,6 +1,7 @@
-﻿using DataAccessLayer.Contracts;
+﻿using DataAccessLayer.Contexts.EFCore;
+using DataAccessLayer.Contracts;
 
-namespace DataAccessLayer.Contexts.EFCore
+namespace DataAccessLayer.Concrete
 {
     public class RepositoryManager : IRepositoryManager
     {

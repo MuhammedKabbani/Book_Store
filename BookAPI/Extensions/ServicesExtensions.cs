@@ -1,6 +1,9 @@
-﻿using DataAccessLayer.Contexts.EFCore;
+﻿using DataAccessLayer.Concrete;
+using DataAccessLayer.Contexts.EFCore;
 using DataAccessLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
+using ServicesLayer.Concrete;
+using ServicesLayer.Contracts;
 namespace BookAPI.Extensions
 {
     public static class ServicesExtensions
@@ -12,6 +15,10 @@ namespace BookAPI.Extensions
         public static void RegisterRepositoryManager(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+        }
+        public static void RegisterServiceManager(this IServiceCollection services)
+        {
+            services.AddScoped<IServiceManager, ServiceManager>();
         }
     }
 }

@@ -9,8 +9,8 @@ namespace DataAccessLayer.Contracts
 {
     public interface IRepositoryBase<T>
     {
-        IQueryable<T> FindAll(bool trackChanges);
-        IQueryable<T> FindBy(Expression<Func<T, bool>> expression, bool trackChanges);
+        IQueryable<T> GetAll(bool trackChanges);
+        IQueryable<T> GetBy(Expression<Func<T, bool>> expression, bool trackChanges);
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);
