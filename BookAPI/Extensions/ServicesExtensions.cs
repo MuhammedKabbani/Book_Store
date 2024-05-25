@@ -10,7 +10,7 @@ namespace BookAPI.Extensions
     {
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<EFRepositoryContext>(options => options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+            services.AddDbContext<EFRepositoryContext>(options => options.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b => b.MigrationsAssembly("DataAccessLayer")));
         }
         public static void RegisterRepositoryManager(this IServiceCollection services)
         {
