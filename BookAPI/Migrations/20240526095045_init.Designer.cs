@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DataAccessLayer.Migrations
+namespace BookAPI.Migrations
 {
     [DbContext(typeof(EFRepositoryContext))]
-    [Migration("20240525112044_init")]
+    [Migration("20240526095045_init")]
     partial class init
     {
         /// <inheritdoc />

@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace DataAccessLayer.Migrations
+namespace BookAPI.Migrations
 {
     /// <inheritdoc />
     public partial class init : Migration
