@@ -2,6 +2,7 @@
 using BookAPI.Extensions;
 
 using DataAccessLayer.Contexts.EFCore;
+using NLog;
 using System.Reflection.Metadata;
 
 namespace BookAPI
@@ -12,6 +13,7 @@ namespace BookAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            LoadConfigurationForNLog();
             
             builder.Services.AddControllers()
             .AddApplicationPart(typeof(PresentationLayer.AssemblyReference).Assembly);
@@ -24,6 +26,7 @@ namespace BookAPI
             // Add services to the container.
             builder.Services.RegisterRepositoryManager();
             builder.Services.RegisterServiceManager();
+            builder.Services.RegisterLoggerService();
 
 
             var app = builder.Build();
@@ -42,6 +45,11 @@ namespace BookAPI
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static void LoadConfigurationForNLog()
+        {
+            LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "nlog.config"));
         }
     }
 }

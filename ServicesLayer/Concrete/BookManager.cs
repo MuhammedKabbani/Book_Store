@@ -13,10 +13,12 @@ namespace ServicesLayer.Concrete
     {
         private readonly IRepositoryManager _repoManager;
         private readonly IBookRepository _bookRepo;
-        public BookManager(IRepositoryManager repoManager)
+        private readonly ILoggerService _logger;
+        public BookManager(IRepositoryManager repoManager, ILoggerService logger)
         {
             _repoManager = repoManager;
             _bookRepo = _repoManager.Book;
+            _logger = logger;
         }
 
         public void CreateBook(Book book)
@@ -35,7 +37,11 @@ namespace ServicesLayer.Concrete
 
             Book? bookToDelete = _bookRepo.GetBookById(id, false);
             if (bookToDelete is null)
-                throw new InvalidOperationException($"Book with id: {id} wasn't found.");
+            {
+                string message = $"Book with id: {id} wasn't found.";
+                _logger.LogInfo(message);
+                throw new InvalidOperationException(message);
+            }
             
             _bookRepo.Delete(bookToDelete);
             _repoManager.Save();
@@ -44,7 +50,10 @@ namespace ServicesLayer.Concrete
 
         public IEnumerable<Book> GetAllBooks(bool trackChanges)
         {
-            return _bookRepo.GetAll(trackChanges);
+            var result = _bookRepo.GetAll(trackChanges);
+            var resultCount = result.Count();
+            _logger.LogInfo($"Book Count: {resultCount}");
+            return result;
         }
 
         public Book GetBookById(int id, bool trackChanges)

@@ -20,5 +20,9 @@ namespace BookAPI.Extensions
         {
             services.AddScoped<IServiceManager, ServiceManager>();
         }
+        public static void RegisterLoggerService(this IServiceCollection services)
+        {
+            services.AddSingleton<ILoggerService, LoggerManager>();
+        }
     }
 }
