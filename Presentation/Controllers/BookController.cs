@@ -1,12 +1,14 @@
-﻿using DataAccessLayer.Contracts;
-using EntityLayer.Models;
+﻿using EntityLayer.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ServicesLayer.Concrete;
 using ServicesLayer.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BookAPI.Controllers
+namespace PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +29,7 @@ namespace BookAPI.Controllers
             return Ok(_bookServices.GetAllBooks(false));
         }
         [HttpGet("{id:int}")]
-        public IActionResult GetBookById([FromRoute(Name = "id")]int id)
+        public IActionResult GetBookById([FromRoute(Name = "id")] int id)
         {
             if (id <= 0)
                 return BadRequest();
@@ -46,7 +48,7 @@ namespace BookAPI.Controllers
             }
         }
         [HttpPost]
-        public IActionResult CreateBook([FromBody]Book book)
+        public IActionResult CreateBook([FromBody] Book book)
         {
             if (book == null)
                 return BadRequest();
@@ -81,7 +83,7 @@ namespace BookAPI.Controllers
                 entity.Title = book.Title;
                 entity.Price = book.Price;
 
-                _bookServices.UpdateBook(id,entity,true);
+                _bookServices.UpdateBook(id, entity, true);
 
                 return Ok(book);
             }
@@ -129,7 +131,7 @@ namespace BookAPI.Controllers
 
                 bookPatch.ApplyTo(entity);
 
-                _bookServices.UpdateBook(id,entity,true);
+                _bookServices.UpdateBook(id, entity, true);
 
                 return NoContent(); // 204
             }

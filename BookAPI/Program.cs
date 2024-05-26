@@ -1,6 +1,8 @@
 
 using BookAPI.Extensions;
+
 using DataAccessLayer.Contexts.EFCore;
+using System.Reflection.Metadata;
 
 namespace BookAPI
 {
@@ -10,13 +12,16 @@ namespace BookAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
+            
+            builder.Services.AddControllers()
+            .AddApplicationPart(typeof(PresentationLayer.AssemblyReference).Assembly);
+                
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             builder.Services.ConfigureSqlContext(builder.Configuration);
+
+            // Add services to the container.
             builder.Services.RegisterRepositoryManager();
             builder.Services.RegisterServiceManager();
 

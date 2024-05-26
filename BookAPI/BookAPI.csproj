@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Presentation\PresentationLayer.csproj" />
     <ProjectReference Include="..\ServicesLayer\ServicesLayer.csproj" />
   </ItemGroup>
 
