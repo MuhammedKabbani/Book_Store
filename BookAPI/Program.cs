@@ -3,6 +3,7 @@ using BookAPI.Extensions;
 
 using DataAccessLayer.Contexts.EFCore;
 using NLog;
+using ServicesLayer.Contracts;
 using System.Reflection.Metadata;
 
 namespace BookAPI
@@ -30,6 +31,9 @@ namespace BookAPI
 
 
             var app = builder.Build();
+
+            var loggerService = app.Services.GetRequiredService<ILoggerService>();
+            app.ConfigureExceptionHandler(loggerService);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

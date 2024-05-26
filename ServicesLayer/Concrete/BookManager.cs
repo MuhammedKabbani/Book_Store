@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Contracts;
+using EntityLayer.Exceptions;
 using EntityLayer.Models;
 using ServicesLayer.Contracts;
 using System;
@@ -37,11 +38,7 @@ namespace ServicesLayer.Concrete
 
             Book? bookToDelete = _bookRepo.GetBookById(id, false);
             if (bookToDelete is null)
-            {
-                string message = $"Book with id: {id} wasn't found.";
-                _logger.LogInfo(message);
-                throw new InvalidOperationException(message);
-            }
+                throw new BookNotFoundException(id);
             
             _bookRepo.Delete(bookToDelete);
             _repoManager.Save();
@@ -61,7 +58,11 @@ namespace ServicesLayer.Concrete
             if (id <= 0)
                 throw new ArgumentOutOfRangeException(nameof(id));
 
-            return _bookRepo.GetBookById(id, trackChanges);
+            Book? book = _bookRepo.GetBookById(id, trackChanges);
+            if (book is null)
+                throw new BookNotFoundException(id);
+
+            return book;
 
         }
 
@@ -69,7 +70,7 @@ namespace ServicesLayer.Concrete
         {
             Book? bookToUpdate = _bookRepo.GetBookById(id, trackChanges);
             if (bookToUpdate is null)
-                throw new InvalidOperationException($"Book with id: {id} wasn't found.");
+                throw new BookNotFoundException(id);
 
             if (book is null)
                 throw new ArgumentNullException(nameof(book));
