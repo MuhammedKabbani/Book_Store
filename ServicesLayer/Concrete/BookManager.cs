@@ -1,4 +1,6 @@
-﻿using DataAccessLayer.Contracts;
+﻿using AutoMapper;
+using DataAccessLayer.Contracts;
+using EntityLayer.DTOs;
 using EntityLayer.Exceptions;
 using EntityLayer.Models;
 using ServicesLayer.Contracts;
@@ -15,11 +17,13 @@ namespace ServicesLayer.Concrete
         private readonly IRepositoryManager _repoManager;
         private readonly IBookRepository _bookRepo;
         private readonly ILoggerService _logger;
-        public BookManager(IRepositoryManager repoManager, ILoggerService logger)
+        private readonly IMapper _mapper;
+        public BookManager(IRepositoryManager repoManager, ILoggerService logger, IMapper mapper)
         {
             _repoManager = repoManager;
             _bookRepo = _repoManager.Book;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public void CreateBook(Book book)
@@ -66,18 +70,18 @@ namespace ServicesLayer.Concrete
 
         }
 
-        public void UpdateBook(int id, Book book, bool trackChanges)
+        public void UpdateBook(int id, DTOBookUpdate bookdto, bool trackChanges)
         {
             Book? bookToUpdate = _bookRepo.GetBookById(id, trackChanges);
             if (bookToUpdate is null)
                 throw new BookNotFoundException(id);
 
-            if (book is null)
-                throw new ArgumentNullException(nameof(book));
+            if (bookdto is null)
+                throw new ArgumentNullException(nameof(bookdto));
 
             // mapping
-            bookToUpdate.Price = book.Price;
-            bookToUpdate.Title = book.Title;
+            bookToUpdate = _mapper.Map<Book>(bookdto);
+
 
             _bookRepo.Update(bookToUpdate);
             _repoManager.Save();

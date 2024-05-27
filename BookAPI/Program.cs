@@ -28,7 +28,7 @@ namespace BookAPI
             builder.Services.RegisterRepositoryManager();
             builder.Services.RegisterServiceManager();
             builder.Services.RegisterLoggerService();
-
+            builder.Services.RegisterAutoMapper();
 
             var app = builder.Build();
 

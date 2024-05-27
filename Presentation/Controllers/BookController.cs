@@ -1,4 +1,5 @@
-﻿using EntityLayer.Exceptions;
+﻿using EntityLayer.DTOs;
+using EntityLayer.Exceptions;
 using EntityLayer.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -52,19 +53,13 @@ namespace PresentationLayer.Controllers
         }
         [HttpPut("{id:int}")]
         public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id,
-    [FromBody] Book book)
+    [FromBody] DTOBookUpdate book)
         {
-            // check book?
-            var entity = _bookServices.GetBookById(id, true);
-
             // check id
-            if (id != book.Id)
+            if (book is null)
                 return BadRequest(); // 400
 
-            entity.Title = book.Title;
-            entity.Price = book.Price;
-
-            _bookServices.UpdateBook(id, entity, true);
+            _bookServices.UpdateBook(id, book, false);
 
             return Ok(book);
         }
@@ -80,11 +75,10 @@ namespace PresentationLayer.Controllers
             [FromBody] JsonPatchDocument<Book> bookPatch)
         {
             // check entity
-            var entity = _bookServices.GetBookById(id, true);
+            var book = _bookServices.GetBookById(id, true);
 
-            bookPatch.ApplyTo(entity);
-
-            _bookServices.UpdateBook(id, entity, true);
+            bookPatch.ApplyTo(book);
+            _bookServices.UpdateBook(id, new DTOBookUpdate(book.Id,book.Title,book.Price), true);
 
             return NoContent(); // 204
         }

@@ -24,5 +24,9 @@ namespace BookAPI.Extensions
         {
             services.AddSingleton<ILoggerService, LoggerManager>();
         }
+        public static void RegisterAutoMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(Program));
+        }
     }
 }
