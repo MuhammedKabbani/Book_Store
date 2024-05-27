@@ -49,12 +49,12 @@ namespace ServicesLayer.Concrete
 
         }
 
-        public IEnumerable<Book> GetAllBooks(bool trackChanges)
+        public IEnumerable<DTOBook> GetAllBooks(bool trackChanges)
         {
             var result = _bookRepo.GetAll(trackChanges);
             var resultCount = result.Count();
             _logger.LogInfo($"Book Count: {resultCount}");
-            return result;
+            return _mapper.Map<IEnumerable<DTOBook>>(result);
         }
 
         public Book GetBookById(int id, bool trackChanges)

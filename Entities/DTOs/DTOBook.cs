@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.DTOs
 {
-    public record DTOBookUpdate 
+    public record DTOBook 
     {
         public int Id { get; set; }
         public String Title { get; set; }

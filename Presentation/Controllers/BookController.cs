@@ -78,7 +78,7 @@ namespace PresentationLayer.Controllers
             var book = _bookServices.GetBookById(id, true);
 
             bookPatch.ApplyTo(book);
-            _bookServices.UpdateBook(id, new DTOBookUpdate(book.Id,book.Title,book.Price), true);
+            _bookServices.UpdateBook(id, new DTOBookUpdate() { Id = book.Id,Title = book.Title,Price = book.Price}, true);
 
             return NoContent(); // 204
         }

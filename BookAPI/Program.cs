@@ -2,6 +2,7 @@
 using BookAPI.Extensions;
 
 using DataAccessLayer.Contexts.EFCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NLog;
 using ServicesLayer.Contracts;
 using System.Reflection.Metadata;
@@ -16,7 +17,12 @@ namespace BookAPI
 
             LoadConfigurationForNLog();
             
-            builder.Services.AddControllers()
+            builder.Services.AddControllers(config => {
+                config.RespectBrowserAcceptHeader = true;
+                config.ReturnHttpNotAcceptable = true;
+            })
+            .AddXmlDataContractSerializerFormatters()
+            .AddCustomCsvFormatter()
             .AddApplicationPart(typeof(PresentationLayer.AssemblyReference).Assembly);
                 
             builder.Services.AddEndpointsApiExplorer();

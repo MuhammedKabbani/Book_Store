@@ -9,6 +9,7 @@ namespace BookAPI.Utilities.AutoMapper
         public MappingProfile()
         {
             CreateMap<DTOBookUpdate, Book>();
+            CreateMap<Book,DTOBook>();
         }
     }
 }
