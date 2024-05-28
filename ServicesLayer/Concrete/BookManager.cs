@@ -34,7 +34,14 @@ namespace ServicesLayer.Concrete
             _bookRepo.Create(book);
             _repoManager.Save();
         }
+        public async Task CreateBookAsync(Book book)
+        {
+            if (book is null)
+                throw new ArgumentNullException(nameof(book));
 
+            _bookRepo.Create(book);
+            await _repoManager.SaveAsync();
+        }
         public void DeleteBook(int id)
         {
             if (id <= 0)
@@ -48,7 +55,19 @@ namespace ServicesLayer.Concrete
             _repoManager.Save();
 
         }
+        public async Task DeleteBookAsync(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentOutOfRangeException(nameof(id));
 
+            Book? bookToDelete = await _bookRepo.GetBookByIdAsync(id, false);
+            if (bookToDelete is null)
+                throw new BookNotFoundException(id);
+
+            _bookRepo.Delete(bookToDelete);
+            await _repoManager.SaveAsync();
+
+        }
         public IEnumerable<DTOBook> GetAllBooks(bool trackChanges)
         {
             var result = _bookRepo.GetAll(trackChanges);
@@ -56,13 +75,31 @@ namespace ServicesLayer.Concrete
             _logger.LogInfo($"Book Count: {resultCount}");
             return _mapper.Map<IEnumerable<DTOBook>>(result);
         }
-
+        public async Task<IEnumerable<DTOBook>> GetAllBooksAsync(bool trackChanges)
+        {
+            var result = await _bookRepo.GetAllBooksAsync(trackChanges);
+            var resultCount = result.Count();
+            _logger.LogInfo($"Book Count: {resultCount}");
+            return _mapper.Map<IEnumerable<DTOBook>>(result);
+        }
         public Book GetBookById(int id, bool trackChanges)
         {
             if (id <= 0)
                 throw new ArgumentOutOfRangeException(nameof(id));
 
             Book? book = _bookRepo.GetBookById(id, trackChanges);
+            if (book is null)
+                throw new BookNotFoundException(id);
+
+            return book;
+
+        }
+        public async Task<Book> GetBookByIdAsync(int id, bool trackChanges)
+        {
+            if (id <= 0)
+                throw new ArgumentOutOfRangeException(nameof(id));
+
+            Book? book = await _bookRepo.GetBookByIdAsync(id, trackChanges);
             if (book is null)
                 throw new BookNotFoundException(id);
 
@@ -85,6 +122,22 @@ namespace ServicesLayer.Concrete
 
             _bookRepo.Update(bookToUpdate);
             _repoManager.Save();
+        }
+        public async Task UpdateBookAsync(int id, DTOBookUpdate bookdto, bool trackChanges)
+        {
+            Book? bookToUpdate = await _bookRepo.GetBookByIdAsync(id, trackChanges);
+            if (bookToUpdate is null)
+                throw new BookNotFoundException(id);
+
+            if (bookdto is null)
+                throw new ArgumentNullException(nameof(bookdto));
+
+            // mapping
+            bookToUpdate = _mapper.Map<Book>(bookdto);
+
+
+            _bookRepo.Update(bookToUpdate);
+            await _repoManager.SaveAsync();
         }
     }
 }

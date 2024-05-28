@@ -26,59 +26,59 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetBooks()
+        public async Task<IActionResult> GetBooksAsync()
         {
-            return Ok(_bookServices.GetAllBooks(false));
+            return  Ok(await _bookServices.GetAllBooksAsync(false));
         }
         [HttpGet("{id:int}")]
-        public IActionResult GetBookById([FromRoute(Name = "id")] int id)
+        public async Task<IActionResult> GetBookByIdAsync([FromRoute(Name = "id")] int id)
         {
             if (id <= 0)
                 return BadRequest();
 
-            return Ok(_bookServices.GetBookById(id, false));
+            return Ok(await _bookServices.GetBookByIdAsync(id, false));
             
         }
         [HttpPost]
-        public IActionResult CreateBook([FromBody] Book book)
+        public async Task<IActionResult> CreateBookAsync([FromBody] Book book)
         {
             if (book == null)
                 return BadRequest();
 
 
-            _bookServices.CreateBook(book);
+            await _bookServices.CreateBookAsync(book);
 
             return StatusCode(201, book); 
             
         }
         [HttpPut("{id:int}")]
-        public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id,
+        public async Task<IActionResult> UpdateOneBookAsync([FromRoute(Name = "id")] int id,
     [FromBody] DTOBookUpdate book)
         {
             // check id
             if (book is null)
                 return BadRequest(); // 400
 
-            _bookServices.UpdateBook(id, book, false);
+            await _bookServices.UpdateBookAsync(id, book, false);
 
             return Ok(book);
         }
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteOneBook([FromRoute(Name = "id")] int id)
+        public async Task<IActionResult> DeleteOneBookAsync([FromRoute(Name = "id")] int id)
         {
-            _bookServices.DeleteBook(id);
+            await _bookServices.DeleteBookAsync(id);
 
             return NoContent();
         }
         [HttpPatch("{id:int}")]
-        public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id,
+        public async Task<IActionResult> PartiallyUpdateOneBookAsync([FromRoute(Name = "id")] int id,
             [FromBody] JsonPatchDocument<Book> bookPatch)
         {
             // check entity
-            var book = _bookServices.GetBookById(id, true);
+            var book = await _bookServices.GetBookByIdAsync(id, true);
 
             bookPatch.ApplyTo(book);
-            _bookServices.UpdateBook(id, new DTOBookUpdate() { Id = book.Id,Title = book.Title,Price = book.Price}, true);
+            await _bookServices.UpdateBookAsync(id, new DTOBookUpdate() { Id = book.Id,Title = book.Title,Price = book.Price}, true);
 
             return NoContent(); // 204
         }

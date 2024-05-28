@@ -10,5 +10,8 @@ namespace DataAccessLayer.Contracts
     public interface IBookRepository : IRepositoryBase<Book>
     {
         Book? GetBookById(int id, bool trackChanges);
+        Task<Book?> GetBookByIdAsync(int id, bool trackChanges);
+        IEnumerable<Book> GetAllBooks(bool trackChanges);
+        Task<IEnumerable<Book>> GetAllBooksAsync(bool trackChanges);
     }
 }

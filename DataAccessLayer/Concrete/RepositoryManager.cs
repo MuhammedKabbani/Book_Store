@@ -20,5 +20,9 @@ namespace DataAccessLayer.Concrete
         {
             _context.SaveChanges();
         }
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
