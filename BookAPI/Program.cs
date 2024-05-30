@@ -4,6 +4,7 @@ using BookAPI.Extensions;
 using DataAccessLayer.Contexts.EFCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NLog;
+using PresentationLayer.ActionFilters;
 using ServicesLayer.Contracts;
 using System.Reflection.Metadata;
 
@@ -35,6 +36,7 @@ namespace BookAPI
             builder.Services.RegisterServiceManager();
             builder.Services.RegisterLoggerService();
             builder.Services.RegisterAutoMapper();
+            builder.Services.AddSingleton<ValidationFilterAttribute>();
 
             var app = builder.Build();
 

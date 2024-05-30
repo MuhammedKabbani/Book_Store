@@ -3,7 +3,9 @@ using EntityLayer.Exceptions;
 using EntityLayer.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.ActionFilters;
 using ServicesLayer.Contracts;
+using ServicesLayer.ValidationRules.FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,7 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBooksAsync()
         {
-            return  Ok(await _bookServices.GetAllBooksAsync(false));
+            return Ok(await _bookServices.GetAllBooksAsync(false));
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetBookByIdAsync([FromRoute(Name = "id")] int id)
@@ -37,9 +39,10 @@ namespace PresentationLayer.Controllers
                 return BadRequest();
 
             return Ok(await _bookServices.GetBookByIdAsync(id, false));
-            
+
         }
         [HttpPost]
+        [ValidationFilter(ValidatorType = typeof(BookValidator))]
         public async Task<IActionResult> CreateBookAsync([FromBody] Book book)
         {
             if (book == null)
