@@ -67,6 +67,9 @@ namespace ServicesLayer.Concrete
         }
         public async Task<(IEnumerable<DTOBook>, MetaData)> GetAllBooksAsync(BookRequestParameters bookParameters,bool trackChanges)
         {
+            if (!bookParameters.ValidPriceRange)
+                throw new BookPriceOutOfRangeBadRequestException();
+
             var result = await _bookRepo.GetAllBooksAsync(bookParameters,trackChanges);
             var resultCount = result.Count();
             _logger.LogInfo($"Book Count: {resultCount}");

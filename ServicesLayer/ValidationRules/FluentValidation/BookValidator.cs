@@ -8,6 +8,7 @@ namespace ServicesLayer.ValidationRules.FluentValidation
         public BookValidator()
         {
             RuleFor(book => book.Price).GreaterThan(25);
+            RuleFor(book => book.Price).LessThan(1000);
             RuleFor(book => book.Title).MinimumLength(5);
             RuleFor(book => book.Title).MaximumLength(100);
         }

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Contexts.EFCore;
+using DataAccessLayer.Contexts.EFCore.Extensions;
 using DataAccessLayer.Contracts;
 using EntityLayer.Models;
 using EntityLayer.RequestFeatures;
@@ -30,6 +31,7 @@ namespace DataAccessLayer.Concrete
         public async Task<PagedList<Book>> GetAllBooksAsync(BookRequestParameters bookParameters, bool trackChanges)
         {
             var books = await GetAll(trackChanges)
+                .FilterBooksPrice(bookParameters.MinPrice, bookParameters.MaxPrice)
                 .OrderBy(x=>x.Id)
                 .ToListAsync();
 
