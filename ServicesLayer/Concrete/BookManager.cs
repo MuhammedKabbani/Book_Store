@@ -3,6 +3,7 @@ using DataAccessLayer.Contracts;
 using EntityLayer.DTOs;
 using EntityLayer.Exceptions;
 using EntityLayer.Models;
+using EntityLayer.RequestFeatures;
 using ServicesLayer.Contracts;
 using System;
 using System.Collections.Generic;
@@ -57,19 +58,20 @@ namespace ServicesLayer.Concrete
             _bookRepo.Delete(bookToDelete);
             await _repoManager.SaveAsync();
         }
-        public IEnumerable<DTOBook> GetAllBooks(bool trackChanges)
+        public (IEnumerable<DTOBook>, MetaData) GetAllBooks(BookRequestParameters bookParameters,bool trackChanges)
         {
-            var result = _bookRepo.GetAll(trackChanges);
+            var result = _bookRepo.GetAllBooks(bookParameters,trackChanges);
             var resultCount = result.Count();
             _logger.LogInfo($"Book Count: {resultCount}");
-            return _mapper.Map<IEnumerable<DTOBook>>(result);
+            return (_mapper.Map<IEnumerable<DTOBook>>(result),result.MetaData);
         }
-        public async Task<IEnumerable<DTOBook>> GetAllBooksAsync(bool trackChanges)
+        public async Task<(IEnumerable<DTOBook>, MetaData)> GetAllBooksAsync(BookRequestParameters bookParameters,bool trackChanges)
         {
-            var result = await _bookRepo.GetAllBooksAsync(trackChanges);
+            var result = await _bookRepo.GetAllBooksAsync(bookParameters,trackChanges);
             var resultCount = result.Count();
             _logger.LogInfo($"Book Count: {resultCount}");
-            return _mapper.Map<IEnumerable<DTOBook>>(result);
+
+            return (_mapper.Map<IEnumerable<DTOBook>>(result),result.MetaData);
         }
         public Book GetBookById(int id, bool trackChanges)
         {

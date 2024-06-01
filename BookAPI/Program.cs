@@ -37,7 +37,7 @@ namespace BookAPI
             builder.Services.RegisterLoggerService();
             builder.Services.RegisterAutoMapper();
             builder.Services.RegisterActionFilter();
-
+            builder.Services.ConfigureCors();
             var app = builder.Build();
 
             var loggerService = app.Services.GetRequiredService<ILoggerService>();
@@ -51,6 +51,8 @@ namespace BookAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

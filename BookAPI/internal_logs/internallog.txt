@@ -54,3 +54,17 @@
 2024-06-01 12:12:23.0542 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
 2024-06-01 12:12:23.0801 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
 2024-06-01 12:12:23.1062 Info Configuration initialized.
+2024-06-01 13:10:54.7918 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-06-01 13:10:54.8743 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
+2024-06-01 13:10:54.8994 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
+2024-06-01 13:10:54.9239 Info Configuration initialized.
+2024-06-01 13:12:55.2021 Info AppDomain Shutting down. LogFactory closing...
+2024-06-01 13:12:55.2247 Info LogFactory has been closed.
+2024-06-01 14:07:21.1974 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-06-01 14:07:21.2642 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
+2024-06-01 14:07:21.3111 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
+2024-06-01 14:07:21.3547 Info Configuration initialized.
+2024-06-01 14:08:28.8758 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-06-01 14:08:28.9222 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
+2024-06-01 14:08:28.9467 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
+2024-06-01 14:08:28.9804 Info Configuration initialized.

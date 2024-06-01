@@ -1,5 +1,6 @@
 ﻿using EntityLayer.DTOs;
 using EntityLayer.Models;
+using EntityLayer.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,8 @@ namespace ServicesLayer.Contracts
 {
     public interface IBookService
     {
-        IEnumerable<DTOBook> GetAllBooks(bool trackChanges);
-        Task<IEnumerable<DTOBook>> GetAllBooksAsync(bool trackChanges);
+        (IEnumerable<DTOBook>,MetaData) GetAllBooks(BookRequestParameters bookParameters, bool trackChanges);
+        Task<(IEnumerable<DTOBook>dTOBooks,MetaData metaData)> GetAllBooksAsync(BookRequestParameters bookParameters, bool trackChanges);
         Book GetBookById(int id, bool trackChanges);
         Task<Book> GetBookByIdAsync(int id, bool trackChanges);
         void CreateBook(Book book);

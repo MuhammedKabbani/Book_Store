@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Models;
+using EntityLayer.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace DataAccessLayer.Contracts
     {
         Book? GetBookById(int id, bool trackChanges);
         Task<Book?> GetBookByIdAsync(int id, bool trackChanges);
-        IEnumerable<Book> GetAllBooks(bool trackChanges);
-        Task<IEnumerable<Book>> GetAllBooksAsync(bool trackChanges);
+        PagedList<Book> GetAllBooks(BookRequestParameters bookParametesr, bool trackChanges);
+        Task<PagedList<Book>> GetAllBooksAsync(BookRequestParameters bookParametesr,bool trackChanges);
     }
 }

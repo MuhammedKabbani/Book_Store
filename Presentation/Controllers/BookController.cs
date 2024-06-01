@@ -1,6 +1,7 @@
 ﻿using EntityLayer.DTOs;
 using EntityLayer.Exceptions;
 using EntityLayer.Models;
+using EntityLayer.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.ActionFilters;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PresentationLayer.Controllers
@@ -30,9 +32,12 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBooksAsync()
+        public async Task<IActionResult> GetBooksAsync([FromQuery] BookRequestParameters bookParameters)
         {
-            return Ok(await _bookServices.GetAllBooksAsync(false));
+            var pagedResult = await _bookServices.GetAllBooksAsync(bookParameters, false);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.dTOBooks);
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetBookByIdAsync([FromRoute(Name = "id")] int id)
