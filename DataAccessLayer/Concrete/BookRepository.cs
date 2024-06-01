@@ -32,6 +32,7 @@ namespace DataAccessLayer.Concrete
         {
             var books = await GetAll(trackChanges)
                 .FilterBooksPrice(bookParameters.MinPrice, bookParameters.MaxPrice)
+                .Search(bookParameters.SearchTerm)
                 .OrderBy(x=>x.Id)
                 .ToListAsync();
 
