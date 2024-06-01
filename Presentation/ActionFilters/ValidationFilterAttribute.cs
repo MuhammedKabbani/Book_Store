@@ -1,5 +1,6 @@
 ﻿using CoreLayer.Validation;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,18 @@ namespace PresentationLayer.ActionFilters
             var validator = (IValidator)Activator.CreateInstance(_validatorType);
             var entityType = _validatorType.BaseType.GetGenericArguments()[0];
             var entitiesToValidate = context.ActionArguments.Where(p => p.Value.GetType() == entityType);
+
             foreach (var entity in entitiesToValidate.Select(x=>x.Value))
             {
-                ValidationTool.Validate(validator, entity);
+                try
+                {
+                    ValidationTool.Validate(validator, entity);
+                }
+                catch (ValidationException ex)
+                {
+                    context.Result = new UnprocessableEntityObjectResult(ex.Message);
+                    return;
+                }
             }
         }
     }

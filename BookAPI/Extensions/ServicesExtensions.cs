@@ -2,6 +2,7 @@
 using DataAccessLayer.Contexts.EFCore;
 using DataAccessLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
+using PresentationLayer.ActionFilters;
 using ServicesLayer.Concrete;
 using ServicesLayer.Contracts;
 namespace BookAPI.Extensions
@@ -27,6 +28,11 @@ namespace BookAPI.Extensions
         public static void RegisterAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Program));
+        }
+        public static void RegisterActionFilter(this IServiceCollection services)
+        {
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddSingleton<LogFilterAttribute>();
         }
     }
 }

@@ -16,6 +16,8 @@ namespace PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+    [ServiceFilter(typeof(LogFilterAttribute))]
     public class BookController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
@@ -35,35 +37,21 @@ namespace PresentationLayer.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetBookByIdAsync([FromRoute(Name = "id")] int id)
         {
-            if (id <= 0)
-                return BadRequest();
-
             return Ok(await _bookServices.GetBookByIdAsync(id, false));
-
         }
         [HttpPost]
         [ValidationFilter(ValidatorType = typeof(BookValidator))]
         public async Task<IActionResult> CreateBookAsync([FromBody] Book book)
         {
-            if (book == null)
-                return BadRequest();
-
-
             await _bookServices.CreateBookAsync(book);
-
             return StatusCode(201, book); 
-            
         }
         [HttpPut("{id:int}")]
+        [ValidationFilter(ValidatorType = typeof(BookValidator))]
         public async Task<IActionResult> UpdateOneBookAsync([FromRoute(Name = "id")] int id,
     [FromBody] DTOBookUpdate book)
         {
-            // check id
-            if (book is null)
-                return BadRequest(); // 400
-
             await _bookServices.UpdateBookAsync(id, book, false);
-
             return Ok(book);
         }
         [HttpDelete("{id:int}")]

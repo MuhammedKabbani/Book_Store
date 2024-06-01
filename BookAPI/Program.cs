@@ -36,7 +36,7 @@ namespace BookAPI
             builder.Services.RegisterServiceManager();
             builder.Services.RegisterLoggerService();
             builder.Services.RegisterAutoMapper();
-            builder.Services.AddSingleton<ValidationFilterAttribute>();
+            builder.Services.RegisterActionFilter();
 
             var app = builder.Build();
 

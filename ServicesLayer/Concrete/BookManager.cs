@@ -44,29 +44,18 @@ namespace ServicesLayer.Concrete
         }
         public void DeleteBook(int id)
         {
-            if (id <= 0)
-                throw new ArgumentOutOfRangeException(nameof(id));
+            Book bookToDelete = GetBookById(id, false);
 
-            Book? bookToDelete = _bookRepo.GetBookById(id, false);
-            if (bookToDelete is null)
-                throw new BookNotFoundException(id);
-            
             _bookRepo.Delete(bookToDelete);
             _repoManager.Save();
 
         }
         public async Task DeleteBookAsync(int id)
         {
-            if (id <= 0)
-                throw new ArgumentOutOfRangeException(nameof(id));
-
-            Book? bookToDelete = await _bookRepo.GetBookByIdAsync(id, false);
-            if (bookToDelete is null)
-                throw new BookNotFoundException(id);
+            Book bookToDelete =await GetBookByIdAsync(id, false);
 
             _bookRepo.Delete(bookToDelete);
             await _repoManager.SaveAsync();
-
         }
         public IEnumerable<DTOBook> GetAllBooks(bool trackChanges)
         {
@@ -109,12 +98,10 @@ namespace ServicesLayer.Concrete
 
         public void UpdateBook(int id, DTOBookUpdate bookdto, bool trackChanges)
         {
-            Book? bookToUpdate = _bookRepo.GetBookById(id, trackChanges);
-            if (bookToUpdate is null)
-                throw new BookNotFoundException(id);
-
             if (bookdto is null)
                 throw new ArgumentNullException(nameof(bookdto));
+
+            Book bookToUpdate = GetBookById(id, trackChanges);
 
             // mapping
             bookToUpdate = _mapper.Map<Book>(bookdto);
@@ -125,12 +112,10 @@ namespace ServicesLayer.Concrete
         }
         public async Task UpdateBookAsync(int id, DTOBookUpdate bookdto, bool trackChanges)
         {
-            Book? bookToUpdate = await _bookRepo.GetBookByIdAsync(id, trackChanges);
-            if (bookToUpdate is null)
-                throw new BookNotFoundException(id);
-
             if (bookdto is null)
                 throw new ArgumentNullException(nameof(bookdto));
+
+            Book? bookToUpdate = await GetBookByIdAsync(id, trackChanges);
 
             // mapping
             bookToUpdate = _mapper.Map<Book>(bookdto);
