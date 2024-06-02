@@ -7,6 +7,7 @@ using EntityLayer.RequestFeatures;
 using ServicesLayer.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,14 @@ namespace ServicesLayer.Concrete
         private readonly IBookRepository _bookRepo;
         private readonly ILoggerService _logger;
         private readonly IMapper _mapper;
-        public BookManager(IRepositoryManager repoManager, ILoggerService logger, IMapper mapper)
+        private readonly IDataShaper<DTOBook> _bookShaper;
+        public BookManager(IRepositoryManager repoManager, ILoggerService logger, IMapper mapper, IDataShaper<DTOBook> bookShaper)
         {
             _repoManager = repoManager;
             _bookRepo = _repoManager.Book;
             _logger = logger;
             _mapper = mapper;
+            _bookShaper = bookShaper;
         }
 
         public void CreateBook(Book book)
@@ -58,14 +61,16 @@ namespace ServicesLayer.Concrete
             _bookRepo.Delete(bookToDelete);
             await _repoManager.SaveAsync();
         }
-        public (IEnumerable<DTOBook>, MetaData) GetAllBooks(BookRequestParameters bookParameters,bool trackChanges)
+        public (IEnumerable<ExpandoObject>, MetaData) GetAllBooks(BookRequestParameters bookParameters,bool trackChanges)
         {
             var result = _bookRepo.GetAllBooks(bookParameters,trackChanges);
             var resultCount = result.Count();
             _logger.LogInfo($"Book Count: {resultCount}");
-            return (_mapper.Map<IEnumerable<DTOBook>>(result),result.MetaData);
+            var mappedBooks = _mapper.Map<IEnumerable<DTOBook>>(result);
+            var shapedBooks = _bookShaper.ShapeData(mappedBooks, bookParameters.Fields);
+            return (shapedBooks,result.MetaData);
         }
-        public async Task<(IEnumerable<DTOBook>, MetaData)> GetAllBooksAsync(BookRequestParameters bookParameters,bool trackChanges)
+        public async Task<(IEnumerable<ExpandoObject>, MetaData)> GetAllBooksAsync(BookRequestParameters bookParameters,bool trackChanges)
         {
             if (!bookParameters.ValidPriceRange)
                 throw new BookPriceOutOfRangeBadRequestException();
@@ -73,8 +78,9 @@ namespace ServicesLayer.Concrete
             var result = await _bookRepo.GetAllBooksAsync(bookParameters,trackChanges);
             var resultCount = result.Count();
             _logger.LogInfo($"Book Count: {resultCount}");
-
-            return (_mapper.Map<IEnumerable<DTOBook>>(result),result.MetaData);
+            var mappedBooks = _mapper.Map<IEnumerable<DTOBook>>(result);
+            var shapedBooks = _bookShaper.ShapeData(mappedBooks, bookParameters.Fields);
+            return (shapedBooks, result.MetaData);
         }
         public Book GetBookById(int id, bool trackChanges)
         {

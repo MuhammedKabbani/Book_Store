@@ -1,6 +1,8 @@
 ﻿using DataAccessLayer.Concrete;
 using DataAccessLayer.Contexts.EFCore;
 using DataAccessLayer.Contracts;
+using EntityLayer.DTOs;
+using EntityLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ActionFilters;
 using ServicesLayer.Concrete;
@@ -46,6 +48,11 @@ namespace BookAPI.Extensions
                            .WithExposedHeaders("X-Pagination");
                 });
             });
+        }
+
+        public static void RegisterDataShaper(this IServiceCollection services)
+        {
+            services.AddScoped<IDataShaper<DTOBook>,DataShaper<DTOBook>>();
         }
     }
 }

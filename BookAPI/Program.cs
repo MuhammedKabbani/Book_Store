@@ -38,6 +38,8 @@ namespace BookAPI
             builder.Services.RegisterAutoMapper();
             builder.Services.RegisterActionFilter();
             builder.Services.ConfigureCors();
+            builder.Services.RegisterDataShaper();
+
             var app = builder.Build();
 
             var loggerService = app.Services.GetRequiredService<ILoggerService>();
