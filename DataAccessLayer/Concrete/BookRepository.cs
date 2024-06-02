@@ -33,7 +33,7 @@ namespace DataAccessLayer.Concrete
             var books = await GetAll(trackChanges)
                 .FilterBooksPrice(bookParameters.MinPrice, bookParameters.MaxPrice)
                 .Search(bookParameters.SearchTerm)
-                .OrderBy(x=>x.Id)
+                .Sort(bookParameters.OrderBy)
                 .ToListAsync();
 
             return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);

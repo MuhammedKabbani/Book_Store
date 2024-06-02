@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
 
 namespace DataAccessLayer.Contexts.EFCore.Extensions
 {
@@ -22,6 +23,18 @@ namespace DataAccessLayer.Contexts.EFCore.Extensions
             var lowercaseSearch = searchTerm.Trim().ToLower();
 
             return books.Where(b => b.Title.ToLower().Contains(lowercaseSearch));
+        }
+        public static IQueryable<Book> Sort(this IQueryable<Book> books, string orderByQueryString)
+        {
+            if (string.IsNullOrWhiteSpace(orderByQueryString))
+                return books.OrderBy(x=>x.Id);
+
+            var orderQuery = OrderQueryBuilder.CreateOrderQuery<Book>(orderByQueryString);
+
+            if (string.IsNullOrWhiteSpace(orderQuery?.ToString()))
+                return books.OrderBy(x => x.Id);
+
+            return books.OrderBy(orderQuery.ToString());
         }
     }
 }
