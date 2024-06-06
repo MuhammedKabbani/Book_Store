@@ -25,6 +25,7 @@ namespace PresentationLayer.Controllers
             _bookServices = _serviceManager.BookService;
         }
 
+        [HttpHead]
         [HttpGet]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetBooksAsync([FromQuery] BookRequestParameters bookParameters)
@@ -80,6 +81,12 @@ namespace PresentationLayer.Controllers
             await _bookServices.UpdateBookAsync(id, new DTOBookUpdate() { Id = book.Id, Title = book.Title, Price = book.Price }, true);
 
             return NoContent(); // 204
+        }
+        [HttpOptions]
+        public IActionResult GetBooksOptions()
+        {
+            Response.Headers.Add("Allow", "GET, PUT, POST, PATCH, DELETE, HEAD, OPTIONS");
+            return Ok();
         }
     }
 }
