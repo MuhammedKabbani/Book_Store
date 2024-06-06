@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ActionFilters;
 using ServicesLayer.Concrete;
 using ServicesLayer.Contracts;
+using static System.Net.Mime.MediaTypeNames;
 namespace BookAPI.Extensions
 {
     public static class ServicesExtensions
@@ -65,11 +66,14 @@ namespace BookAPI.Extensions
                 if (newtonsoftJsonOutputFormatter != null)
                 {
                     newtonsoftJsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.hateoas+json");
+                    newtonsoftJsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.apiroot+json");
+                    
                 }
                 var xmlOutputFormatter = config.OutputFormatters.OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
                 if (xmlOutputFormatter != null)
                 {
                     xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.hateoas+xml");
+                    xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.apiroot+xml");
                 }
             });
         }

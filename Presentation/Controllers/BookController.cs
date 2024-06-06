@@ -26,7 +26,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpHead]
-        [HttpGet]
+        [HttpGet(Name = "GetBooksAsync")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetBooksAsync([FromQuery] BookRequestParameters bookParameters)
         {
@@ -48,7 +48,7 @@ namespace PresentationLayer.Controllers
         {
             return Ok(await _bookServices.GetBookByIdAsync(id, false));
         }
-        [HttpPost]
+        [HttpPost(Name = "CreateBookAsync")]
         [ValidationFilter(ValidatorType = typeof(BookValidator))]
         public async Task<IActionResult> CreateBookAsync([FromBody] Book book)
         {
