@@ -15,9 +15,9 @@ namespace ServicesLayer.Concrete
     {
         private readonly Lazy<IBookService> _bookService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, ILoggerService loggerService, IMapper mapper, IDataShaper<DTOBook> shaper)
+        public ServiceManager(IRepositoryManager repositoryManager, ILoggerService loggerService, IMapper mapper,IBookLinks bookLinks)
         {
-            _bookService = new Lazy<IBookService>(()=> new BookManager(repositoryManager, loggerService, mapper, shaper));
+            _bookService = new Lazy<IBookService>(()=> new BookManager(repositoryManager, loggerService, mapper, bookLinks));
         }
 
         public IBookService BookService => _bookService.Value;

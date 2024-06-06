@@ -9,6 +9,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation" Version="11.9.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="8.0.6" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
   </ItemGroup>
 

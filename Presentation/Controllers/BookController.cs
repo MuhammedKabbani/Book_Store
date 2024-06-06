@@ -1,5 +1,4 @@
 ﻿using EntityLayer.DTOs;
-using EntityLayer.Exceptions;
 using EntityLayer.Models;
 using EntityLayer.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch;
@@ -7,12 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.ActionFilters;
 using ServicesLayer.Contracts;
 using ServicesLayer.ValidationRules.FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PresentationLayer.Controllers
 {
@@ -32,12 +26,21 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetBooksAsync([FromQuery] BookRequestParameters bookParameters)
         {
-            var pagedResult = await _bookServices.GetAllBooksAsync(bookParameters, false);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            var linkParamters = new DTOLinkParameters()
+            {
+                BookRequestParameters = bookParameters,
+                HttpContext = HttpContext
+            };
 
-            return Ok(pagedResult.dTOBooks);
+            var result = await _bookServices.GetAllBooksAsync(linkParamters, false);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.metaData));
+
+            return result.linkResponse.HasLinks ?
+                    Ok(result.linkResponse.LinkedEntites) :
+                    Ok(result.linkResponse.SahpedEntities);
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetBookByIdAsync([FromRoute(Name = "id")] int id)
@@ -49,7 +52,7 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> CreateBookAsync([FromBody] Book book)
         {
             await _bookServices.CreateBookAsync(book);
-            return StatusCode(201, book); 
+            return StatusCode(201, book);
         }
         [HttpPut("{id:int}")]
         [ValidationFilter(ValidatorType = typeof(BookValidator))]
@@ -74,7 +77,7 @@ namespace PresentationLayer.Controllers
             var book = await _bookServices.GetBookByIdAsync(id, true);
 
             bookPatch.ApplyTo(book);
-            await _bookServices.UpdateBookAsync(id, new DTOBookUpdate() { Id = book.Id,Title = book.Title,Price = book.Price}, true);
+            await _bookServices.UpdateBookAsync(id, new DTOBookUpdate() { Id = book.Id, Title = book.Title, Price = book.Price }, true);
 
             return NoContent(); // 204
         }

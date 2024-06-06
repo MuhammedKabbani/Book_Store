@@ -3,6 +3,8 @@ using DataAccessLayer.Contexts.EFCore;
 using DataAccessLayer.Contracts;
 using EntityLayer.DTOs;
 using EntityLayer.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ActionFilters;
 using ServicesLayer.Concrete;
@@ -35,6 +37,7 @@ namespace BookAPI.Extensions
         {
             services.AddScoped<ValidationFilterAttribute>();
             services.AddSingleton<LogFilterAttribute>();
+            services.AddScoped<ValidateMediaTypeAttribute>();
         }
         public static void ConfigureCors(this IServiceCollection services)
         {
@@ -53,6 +56,22 @@ namespace BookAPI.Extensions
         public static void RegisterDataShaper(this IServiceCollection services)
         {
             services.AddScoped<IDataShaper<DTOBook>,DataShaper<DTOBook>>();
+        }
+        public static void AddCustomMediaType(this IServiceCollection services)
+        {
+            services.Configure<MvcOptions>(config =>
+            {
+                var newtonsoftJsonOutputFormatter = config.OutputFormatters.OfType<SystemTextJsonOutputFormatter>()?.FirstOrDefault();
+                if (newtonsoftJsonOutputFormatter != null)
+                {
+                    newtonsoftJsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.hateoas+json");
+                }
+                var xmlOutputFormatter = config.OutputFormatters.OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
+                if (xmlOutputFormatter != null)
+                {
+                    xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.hateoas+xml");
+                }
+            });
         }
     }
 }

@@ -5,6 +5,7 @@ using DataAccessLayer.Contexts.EFCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NLog;
 using PresentationLayer.ActionFilters;
+using ServicesLayer.Concrete;
 using ServicesLayer.Contracts;
 using System.Reflection.Metadata;
 
@@ -39,6 +40,8 @@ namespace BookAPI
             builder.Services.RegisterActionFilter();
             builder.Services.ConfigureCors();
             builder.Services.RegisterDataShaper();
+            builder.Services.AddCustomMediaType();
+            builder.Services.AddScoped<IBookLinks, BookLinks>();
 
             var app = builder.Build();
 
