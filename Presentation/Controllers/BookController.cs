@@ -10,9 +10,9 @@ using System.Text.Json;
 
 namespace PresentationLayer.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
-
     [ServiceFilter(typeof(LogFilterAttribute))]
     public class BookController : ControllerBase
     {

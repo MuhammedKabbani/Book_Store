@@ -15,6 +15,7 @@ namespace ServicesLayer.Contracts
     {
         (LinkResponse linkResponse, MetaData metaData) GetAllBooks(DTOLinkParameters bookParameters, bool trackChanges);
         Task<(LinkResponse linkResponse, MetaData metaData)> GetAllBooksAsync(DTOLinkParameters bookParameters, bool trackChanges);
+        Task<IEnumerable<DTOBook>> GetAllBooksAsync(bool trackChanges);
         Book GetBookById(int id, bool trackChanges);
         Task<Book> GetBookByIdAsync(int id, bool trackChanges);
         void CreateBook(Book book);

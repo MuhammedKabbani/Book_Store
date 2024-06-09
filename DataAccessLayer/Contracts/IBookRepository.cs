@@ -14,5 +14,7 @@ namespace DataAccessLayer.Contracts
         Task<Book?> GetBookByIdAsync(int id, bool trackChanges);
         PagedList<Book> GetAllBooks(BookRequestParameters bookParametesr, bool trackChanges);
         Task<PagedList<Book>> GetAllBooksAsync(BookRequestParameters bookParametesr,bool trackChanges);
+        Task<IEnumerable<Book>> GetAllBooksAsync(bool trackChanges);
+
     }
 }

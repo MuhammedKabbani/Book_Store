@@ -38,6 +38,13 @@ namespace DataAccessLayer.Concrete
 
             return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);
         }
+        public async Task<IEnumerable<Book>> GetAllBooksAsync(bool trackChanges)
+        {
+            var books = await GetAll(trackChanges)
+                .Sort("id")
+                .ToListAsync();
 
+            return books;
+        }
     }
 }

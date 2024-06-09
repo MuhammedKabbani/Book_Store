@@ -83,6 +83,15 @@ namespace ServicesLayer.Concrete
             var links = _bookLinks.TryGenerateLinks(mappedBooks, bookParameters.BookRequestParameters.Fields, bookParameters.HttpContext);
             return (links, result.MetaData);
         }
+        public async Task<IEnumerable<DTOBook>> GetAllBooksAsync(bool trackChanges)
+        {
+
+            var result = await _bookRepo.GetAllBooksAsync(trackChanges);
+            var resultCount = result.Count();
+            var bookDto = _mapper.Map<IEnumerable<DTOBook>>(result);
+            _logger.LogInfo($"Book Count: {resultCount}");
+            return bookDto;
+        }
         public Book GetBookById(int id, bool trackChanges)
         {
             if (id <= 0)

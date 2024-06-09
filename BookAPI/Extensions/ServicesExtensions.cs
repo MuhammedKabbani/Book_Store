@@ -5,8 +5,10 @@ using EntityLayer.DTOs;
 using EntityLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.ActionFilters;
+using PresentationLayer.Controllers;
 using ServicesLayer.Concrete;
 using ServicesLayer.Contracts;
 using static System.Net.Mime.MediaTypeNames;
@@ -75,6 +77,24 @@ namespace BookAPI.Extensions
                     xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.hateoas+xml");
                     xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.apiroot+xml");
                 }
+            });
+        }
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+
+                //opt.Conventions.Controller<BookController>()
+                //                .HasApiVersion(new ApiVersion(1, 0));
+
+                //opt.Conventions.Controller<BookV2Controller>()
+                //                .HasApiVersion(new ApiVersion(2, 0));
+
+
             });
         }
     }

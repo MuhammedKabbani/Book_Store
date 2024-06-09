@@ -42,6 +42,7 @@ namespace BookAPI
             builder.Services.RegisterDataShaper();
             builder.Services.AddCustomMediaType();
             builder.Services.AddScoped<IBookLinks, BookLinks>();
+            builder.Services.ConfigureVersioning();
 
             var app = builder.Build();
 
