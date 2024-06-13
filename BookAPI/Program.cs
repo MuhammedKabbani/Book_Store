@@ -22,6 +22,7 @@ namespace BookAPI
             builder.Services.AddControllers(config => {
                 config.RespectBrowserAcceptHeader = true;
                 config.ReturnHttpNotAcceptable = true;
+                config.CacheProfiles.Add("5mins", new Microsoft.AspNetCore.Mvc.CacheProfile() { Duration = 500 });
             })
             .AddXmlDataContractSerializerFormatters()
             .AddCustomCsvFormatter()
@@ -43,7 +44,8 @@ namespace BookAPI
             builder.Services.AddCustomMediaType();
             builder.Services.AddScoped<IBookLinks, BookLinks>();
             builder.Services.ConfigureVersioning();
-
+            builder.Services.ConfigureResponseCahing();
+            //builder.Services.ConfigureHttpCachHeaders();
             var app = builder.Build();
 
             var loggerService = app.Services.GetRequiredService<ILoggerService>();
@@ -59,6 +61,8 @@ namespace BookAPI
             app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
+
+            app.UseResponseCaching();
 
             app.UseAuthorization();
 

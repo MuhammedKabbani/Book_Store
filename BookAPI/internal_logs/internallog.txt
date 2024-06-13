@@ -130,3 +130,15 @@
 2024-06-09 14:34:37.8070 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
 2024-06-09 14:34:37.8231 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
 2024-06-09 14:34:37.8423 Info Configuration initialized.
+2024-06-09 15:04:16.1815 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-06-09 15:04:16.2167 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
+2024-06-09 15:04:16.2368 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
+2024-06-09 15:04:16.2602 Info Configuration initialized.
+2024-06-09 15:12:24.5102 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-06-09 15:12:24.5435 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
+2024-06-09 15:12:24.5631 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
+2024-06-09 15:12:24.5892 Info Configuration initialized.
+2024-06-14 00:13:00.1391 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-06-14 00:13:00.5294 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.2.2526. Product version: 5.3.2+8d52d4f3fcdbd84beae3442e1fdc8125598ed81f. GlobalAssemblyCache: False
+2024-06-14 00:13:00.6187 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\KB\source\repos\BookStore\BookAPI\bin\Debug\net8.0\NLog.config
+2024-06-14 00:13:00.7702 Info Configuration initialized.

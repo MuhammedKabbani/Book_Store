@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using PresentationLayer.ActionFilters;
 using PresentationLayer.Controllers;
 using ServicesLayer.Concrete;
@@ -96,6 +97,14 @@ namespace BookAPI.Extensions
 
 
             });
+        }
+        public static void ConfigureResponseCahing(this IServiceCollection services)
+        {
+            services.AddResponseCaching();
+        }
+        public static void ConfigureHttpCachHeaders(this IServiceCollection services)
+        {
+            services.AddHttpCacheHeaders();
         }
     }
 }
