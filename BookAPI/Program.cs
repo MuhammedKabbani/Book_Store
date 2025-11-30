@@ -1,4 +1,5 @@
 
+using AspNetCoreRateLimit;
 using BookAPI.Extensions;
 
 using DataAccessLayer.Contexts.EFCore;
@@ -46,6 +47,9 @@ namespace BookAPI
             builder.Services.ConfigureVersioning();
             builder.Services.ConfigureResponseCahing();
             //builder.Services.ConfigureHttpCachHeaders();
+            builder.Services.AddMemoryCache();
+            builder.Services.ConfigureRateLimitingOptions();
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
 
             var loggerService = app.Services.GetRequiredService<ILoggerService>();
@@ -59,6 +63,8 @@ namespace BookAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseIpRateLimiting();
 
             app.UseCors("CorsPolicy");
 

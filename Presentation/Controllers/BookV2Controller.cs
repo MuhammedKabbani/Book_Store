@@ -12,7 +12,7 @@ namespace PresentationLayer.Controllers
 {
     //[ApiVersion("2.0", Deprecated = true)]
     [ApiVersion("2.0")]
-    [Route("api/Book")]
+    [Route("api/[controller]")]
     [ApiController]
     [ServiceFilter(typeof(LogFilterAttribute))]
     public class BookV2Controller : ControllerBase

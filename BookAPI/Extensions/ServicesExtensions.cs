@@ -1,18 +1,15 @@
-﻿using DataAccessLayer.Concrete;
+﻿using AspNetCoreRateLimit;
+using DataAccessLayer.Concrete;
 using DataAccessLayer.Contexts.EFCore;
 using DataAccessLayer.Contracts;
 using EntityLayer.DTOs;
-using EntityLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Serialization;
 using PresentationLayer.ActionFilters;
-using PresentationLayer.Controllers;
 using ServicesLayer.Concrete;
 using ServicesLayer.Contracts;
-using static System.Net.Mime.MediaTypeNames;
 namespace BookAPI.Extensions
 {
     public static class ServicesExtensions
@@ -59,7 +56,7 @@ namespace BookAPI.Extensions
 
         public static void RegisterDataShaper(this IServiceCollection services)
         {
-            services.AddScoped<IDataShaper<DTOBook>,DataShaper<DTOBook>>();
+            services.AddScoped<IDataShaper<DTOBook>, DataShaper<DTOBook>>();
         }
         public static void AddCustomMediaType(this IServiceCollection services)
         {
@@ -70,7 +67,7 @@ namespace BookAPI.Extensions
                 {
                     newtonsoftJsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.hateoas+json");
                     newtonsoftJsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.bookstore.apiroot+json");
-                    
+
                 }
                 var xmlOutputFormatter = config.OutputFormatters.OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
                 if (xmlOutputFormatter != null)
@@ -105,6 +102,26 @@ namespace BookAPI.Extensions
         public static void ConfigureHttpCachHeaders(this IServiceCollection services)
         {
             services.AddHttpCacheHeaders();
+        }
+        public static void ConfigureRateLimitingOptions(this IServiceCollection services)
+        {
+            var rateLimitRules = new List<RateLimitRule>
+            {
+                new RateLimitRule()
+                {
+                    Endpoint = "*",
+                    Limit = 3,
+                    Period = "1m"
+                }
+            };
+            services.Configure<IpRateLimitOptions>(opt =>
+            {
+                opt.GeneralRules = rateLimitRules;
+            });
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
         }
     }
 }

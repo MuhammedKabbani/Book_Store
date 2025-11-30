@@ -11,7 +11,7 @@ using System.Text.Json;
 namespace PresentationLayer.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/[controller]")]
+    [Route("api/Book")]
     [ApiController]
     [ServiceFilter(typeof(LogFilterAttribute))]
     [ResponseCache(CacheProfileName = "5mins")]
